@@ -8,17 +8,18 @@ const cardsList = document.querySelector(".places__list");
 function createCard(item, removeCard) {
   const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
   cardItem.querySelector(".card__image").src = item.link;
+  cardItem.querySelector(".card__image").alt = item.name;
   cardItem.querySelector(".card__title").textContent = item.name;
 
   const buttonDelete = cardItem.querySelector(".card__delete-button");
-  buttonDelete.addEventListener("click", removeCard);
+  buttonDelete.addEventListener("click", () => removeCard(cardItem));
 
   return cardItem;
 }
 
 // @todo: Функция удаления карточки
-function removeCard(evt) {
-  evt.target.closest(".card").remove();
+function removeCard(cardItem) {
+  cardItem.remove();
 }
 
 // @todo: Вывести карточки на страницу
