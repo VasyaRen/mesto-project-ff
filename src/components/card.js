@@ -1,7 +1,6 @@
-import { cardTemplate, zoomCardImg } from "../index.js";
-
 // Функция создания карточки с возможностью её увеличить, удалить и лайкнуть
-export function createCard(item, removeCard, addLike) {
+export function createCard(item, removeCard, addLike, zoomCardImg) {
+  const cardTemplate = document.querySelector("#card-template").content;
   const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImg = cardItem.querySelector(".card__image");
   cardImg.src = item.link;
