@@ -5,3 +5,11 @@
   background: #fff;
   padding: 25px 20px;
 }
+
+.card__like-section {
+  text-align: center;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}

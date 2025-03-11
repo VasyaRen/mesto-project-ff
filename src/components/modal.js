@@ -3,6 +3,8 @@ export function openPopup(popupElement) {
   popupElement.classList.add("popup_is-opened");
   document.addEventListener("click", closeByClickOnOverlay);
   document.addEventListener("keydown", closeOnEscape);
+
+  
 }
 
 //Функция закрытия поп-апа и удаление слушателей
@@ -10,6 +12,7 @@ export function closePopup(popupElement) {
   popupElement.classList.remove("popup_is-opened");
   document.removeEventListener("click", closeByClickOnOverlay);
   document.removeEventListener("keydown", closeOnEscape);
+
 }
 
 //Функция закрытия поп-апа по клику на оверлей
