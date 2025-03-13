@@ -1,44 +1,38 @@
 // Функция создания карточки с возможностью её увеличить, удалить и лайкнуть
-export function createCard(
-  item,
-  userId,
-  hasAccesToDel,
-  removeCard,
-  hasLikedCard,
-  addLike,
-  zoomCardImg,
-  apiforCard
-) {
+export function createCard(dataCard, userId, callbacksCard, requestsForCard) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardItem = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImg = cardItem.querySelector(".card__image");
-  cardImg.src = item.link;
-  cardImg.alt = item.name;
-  cardItem.querySelector(".card__title").textContent = item.name;
+  const cardTitle = cardItem.querySelector(".card__title");
+  cardImg.src = dataCard.link;
+  cardImg.alt = dataCard.name;
+  cardTitle.textContent = dataCard.name;
 
   const buttonDelete = cardItem.querySelector(".card__delete-button");
-  const cardId = item._id; //записываем айди создаваемой карточки
-  hasAccesToDel(
+  const cardId = dataCard._id; //записываем айди создаваемой карточки
+
+  callbacksCard.hasAccesToDel(
     buttonDelete,
     cardItem,
     cardId,
     userId,
-    item,
-    removeCard,
-    apiforCard
+    dataCard,
+    callbacksCard,
+    requestsForCard
   );
 
   const likeButton = cardItem.querySelector(".card__like-button");
-  const counterLikes = item.likes.length; //получаем кол-во лайков карточки
-  const itemLikes = item.likes; //получаем массив лайков карточки
-  hasLikedCard(likeButton, itemLikes, userId);
+  const counterLikes = dataCard.likes.length; //получаем кол-во лайков карточки
+  const arrLikes = dataCard.likes; //получаем массив лайков карточки
+  callbacksCard.hasLikedCard(likeButton, arrLikes, userId);
 
   likeButton.addEventListener("click", (evt) =>
-    addLike(evt, cardId, cardItem, counterLikes, apiforCard)
+    addLike(evt, cardId, cardItemLikes, counterLikes, requestsForCard)
   );
-  cardItem.querySelector(".like-counter").textContent = counterLikes; //выводим имеющееся на момент отрисовки карточки кол-во лайков
+  const cardItemLikes = cardItem.querySelector(".like-counter");
+  cardItemLikes.textContent = counterLikes; //выводим имеющееся на момент отрисовки карточки кол-во лайков
 
-  cardImg.addEventListener("click", () => zoomCardImg(cardImg));
+  cardImg.addEventListener("click", () => callbacksCard.zoomCardImg(cardImg));
 
   return cardItem;
 }
@@ -59,22 +53,22 @@ export function hasAccesToDel(
   cardItem,
   cardId,
   userId,
-  item,
-  removeCard,
-  apiforCard
+  dataCard,
+  callbacksCard,
+  requestsForCard
 ) {
-  if (userId !== item.owner._id) {
+  if (userId !== dataCard.owner._id) {
     buttonDelete.remove();
   } else {
     buttonDelete.addEventListener("click", () =>
-      removeCard(cardItem, cardId, apiforCard)
+      callbacksCard.removeCard(cardItem, cardId, requestsForCard)
     );
   }
 }
 
 // Функция удаления карточки
-export function removeCard(cardItem, cardId, apiforCard) {
-  apiforCard
+export function removeCard(cardItem, cardId, requestsForCard) {
+  requestsForCard
     .delete(cardId)
     .then(() => {
       cardItem.remove();
@@ -85,23 +79,32 @@ export function removeCard(cardItem, cardId, apiforCard) {
 }
 
 // Функция лайка-дизлайка карточки
-export function addLike(evt, cardId, cardItem, counterLikes, apiforCard) {
+export function addLike(
+  evt,
+  cardId,
+  cardItemLikes,
+  counterLikes,
+  requestsForCard
+) {
   if (evt.target.classList.contains("card__like-button_is-active")) {
     // проверяем, есть ли уже лайк
-    apiforCard
+    requestsForCard
       .unlike(cardId) //если есть - клик уберёт лайк
       .then((res) => {
         evt.target.classList.remove("card__like-button_is-active");
         counterLikes = res.likes.length; // получаем акутальное число лайков
-        cardItem.querySelector(".like-counter").textContent = counterLikes;
+        cardItemLikes.textContent = counterLikes;
+      })
+      .catch((err) => {
+        console.log(err);
       });
   } else {
-    evt.target.classList.add("card__like-button_is-active"); // если нет - добавит лайк
-    apiforCard
+    requestsForCard
       .like(cardId)
       .then((res) => {
+        evt.target.classList.add("card__like-button_is-active"); // если нет - добавит лайк
         counterLikes = res.likes.length; // получаем акутальное число лайков
-        cardItem.querySelector(".like-counter").textContent = counterLikes;
+        cardItemLikes.textContent = counterLikes;
       })
       .catch((err) => {
         console.log(err);

@@ -17,10 +17,12 @@ function toggleButtonState(formInputList, buttonElement, config) {
 //функция деактивации кнопки
 function disableButtonElement(buttonElement, config) {
   buttonElement.classList.add(`${config.inactiveButtonClass}`);
+  buttonElement.setAttribute("disabled", true);
 }
 //функция активации кнопки
 function enableButtonElement(buttonElement, config) {
   buttonElement.classList.remove(`${config.inactiveButtonClass}`);
+  buttonElement.removeAttribute("disabled");
 }
 //показываем спан об ошибке
 function showError(formElement, formInput, config, errorMessage) {
@@ -86,8 +88,9 @@ export function clearValidation(formElement, config) {
   formErrorList.forEach((formError) => {
     formError.textContent = "";
   });
+ 
   const buttonElement = formElement.querySelector(
     `${config.submitButtonSelector}`
   );
-  enableButtonElement(buttonElement, config);
+  disableButtonElement(buttonElement, config);
 }
