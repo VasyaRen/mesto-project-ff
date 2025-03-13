@@ -84,11 +84,12 @@ export function enableValidation(config) {
 
 //очистка ошибок валидации
 export function clearValidation(formElement, config) {
-  const formErrorList = formElement.querySelectorAll(`.${config.errorClass}`);
-  formErrorList.forEach((formError) => {
-    formError.textContent = "";
+  const formInputList = Array.from(
+    formElement.querySelectorAll(`${config.inputSelector}`)
+  );
+  formInputList.forEach((input) => {
+    hideError(formElement, input, config);
   });
- 
   const buttonElement = formElement.querySelector(
     `${config.submitButtonSelector}`
   );

@@ -1,3 +1,4 @@
+  //Функция для управления текстом кнопки в форме в 2 стадиях
  function renderLoading(
   isLoading,
   button,
@@ -11,7 +12,7 @@
   }
 }
 
-
+//Функция обработки формы с изменением текста кнопки и запросом на сервер
 export function handleSubmit(request, evt, loadingText = "Сохранение...") {
   evt.preventDefault();
   const submitButton = evt.submitter;

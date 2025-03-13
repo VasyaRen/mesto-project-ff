@@ -1,3 +1,5 @@
+//Большое спасибо за развёрнутый и полезный комментарий!
+
 import "./index.css";
 import {
   getCardList,
@@ -44,14 +46,6 @@ const imagePopup = document.querySelector(".popup_type_image");
 const cardImgPopup = imagePopup.querySelector(".popup__image");
 const imagePopupCaption = imagePopup.querySelector(".popup__caption");
 
-//Функция увеличения изображения карточки
-function zoomCardImg(cardImg) {
-  openPopup(imagePopup);
-  cardImgPopup.src = cardImg.src;
-  cardImgPopup.alt = cardImg.alt;
-  imagePopupCaption.textContent = cardImg.alt;
-}
-
 //DOM: Коллекция поп-апов страницы
 const popups = document.querySelectorAll(".popup");
 
@@ -96,7 +90,13 @@ const formValidationConfig = {
   errorClass: "input-error",
 };
 
-
+//Функция увеличения изображения карточки
+function zoomCardImg(cardImg) {
+  openPopup(imagePopup);
+  cardImgPopup.src = cardImg.src;
+  cardImgPopup.alt = cardImg.alt;
+  imagePopupCaption.textContent = cardImg.alt;
+}
 
 // Функция изменения аватара профиля через форму
 function handleAddAvatarFormSubmit(evt) {
@@ -104,25 +104,19 @@ function handleAddAvatarFormSubmit(evt) {
     return addAvatarProfile({ avatar: avatarLink.value }).then(() => {
       profilAvatar.style.backgroundImage = `url(${avatarLink.value})`;
       closePopup(avatarProfilePopup);
-      avatarAddForm.reset();
     });
   }
-  clearValidation(avatarAddForm, formValidationConfig);
   handleSubmit(makeRequest, evt);
 }
 
-
-
 // Функция изменения значений полей формы с информацией профиля
-function handleProfileFormSubmit(evt) { 
-        profileName.textContent = nameInput.value;
-        profileJob.textContent = jobInput.value;
+function handleProfileFormSubmit(evt) {
   function makeRequest() {
     return editProfile({ name: nameInput.value, about: jobInput.value }).then(
       () => {
+        profileName.textContent = nameInput.value;
+        profileJob.textContent = jobInput.value;
         closePopup(profilePopup);
-        profileFormElement.reset();
-        
       }
     );
   }
@@ -147,30 +141,30 @@ function handleAddNewCardFormSubmit(evt) {
       (dataCard) => {
         renderCard(dataCard);
         closePopup(addCardPopup);
-        newCardForm.reset();
       }
     );
   }
-  clearValidation(addCardPopup, formValidationConfig);
   handleSubmit(makeRequest, evt);
-  
 }
 
 // Открытие поп-апа для обновления аватара профиля по клику
 avatarAddButton.addEventListener("click", () => {
   openPopup(avatarProfilePopup);
+  clearValidation(avatarAddForm, formValidationConfig);
 });
 
 //Открытие поп-апа для редактирования профиля по клику
 profileEditButton.addEventListener("click", () => {
   openPopup(profilePopup);
   nameInput.value = profileName.textContent;
-  jobInput.value = profileJob.textContent;  
+  jobInput.value = profileJob.textContent;
+  clearValidation(profileFormElement, formValidationConfig);
 });
 
 //Открытие поп-апа для добавления карточки по клику
 addCardButton.addEventListener("click", () => {
   openPopup(addCardPopup);
+  clearValidation(addCardPopup, formValidationConfig);
 });
 
 //Закрытие поп-апов по клику на крестик

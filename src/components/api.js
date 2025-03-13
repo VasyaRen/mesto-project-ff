@@ -8,6 +8,7 @@ const apiConfig = {
   },
 };
 
+//Функция вызова запроса, принимающая url и объект параметров, с проверкой ответа
 function request(url, options) {
   return fetch(url, options).then(checkResponse);
 }
